@@ -15,6 +15,8 @@ window.KARESI_DATA = {
   shuffleOptions: false,
   // 결과 화면에 가격을 보여줄지 (true로 바꾸고 옷마다 price: '00,000원'을 넣으면 다시 보여)
   showPrice: false,
+  // 이 시간(초) 동안 마우스·터치·키보드 움직임이 없으면 첫 화면으로 돌아가 (0 = 끄기)
+  idleResetSeconds: 30,
 
   axes: [
     { key: 'f', name: '실루엣', neg: '테일러드', pos: '릴랙스드', negEn: 'TAILORED', posEn: 'RELAXED' },

@@ -208,14 +208,19 @@ body[data-screen="intro"] .topbar { display: none; }
 .chip { display: inline-block; width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 0 1px var(--line); vertical-align: 0; margin-right: 8px; }
 
 /* 1. 무대 — 옷만 화면 가운데 크게 */
-.rs-stage { position: relative; min-height: calc(100svh - 96px); display: flex; align-items: center; justify-content: center; padding: 40px 0 72px; }
+.rs-stage { position: relative; min-height: calc(100svh - 96px); display: flex; align-items: center; justify-content: center; padding: 40px 0 150px; }
 .rs-stage .rs-banner { position: absolute; top: 0; left: 0; right: 0; margin: 0; }
 .rs-stage__img { width: auto; max-width: min(100%, 640px); max-height: min(72svh, 760px); object-fit: contain; filter: drop-shadow(0 30px 40px rgba(0, 0, 0, .08)); animation: stageIn 1.6s var(--ease) both; }
 @keyframes stageIn { from { opacity: 0; transform: translateY(24px) scale(.97); } to { opacity: 1; transform: none; } }
 .rs-stage__no { position: absolute; left: 0; bottom: 28px; font-family: var(--latin); font-size: 11px; letter-spacing: .2em; }
 .rs-stage__no small { color: var(--ink-3); }
 .rs-stage__color { position: absolute; right: 0; bottom: 28px; font-family: var(--latin); font-size: 11px; letter-spacing: .14em; color: var(--ink-2); }
-.rs-cue { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 10px; font-family: var(--latin); font-size: 9px; letter-spacing: .3em; color: var(--ink-3); }
+.rs-cue { position: absolute; left: 50%; bottom: 8px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 12px; font-family: var(--latin); font-size: 10px; letter-spacing: .3em; color: var(--ink-3); cursor: pointer; animation: fadeIn 1.2s 1.4s var(--ease) both; }
+.rs-cue__box { display: inline-flex; align-items: center; gap: 10px; padding: 13px 24px; font-family: var(--sans); font-size: 14px; font-weight: 500; letter-spacing: .04em; background: var(--ink); color: var(--bg); border: 1px solid var(--ink); white-space: nowrap; transition: background .35s, color .35s; }
+.rs-cue__box b { font-weight: 400; display: inline-block; animation: cueBob 1.6s var(--ease) infinite; }
+.rs-cue:hover .rs-cue__box { background: transparent; color: var(--ink); }
+.rs-cue__s { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+@keyframes cueBob { 0%, 100% { transform: translateY(-2px); } 50% { transform: translateY(4px); } }
 .rs-cue i { display: block; width: 1px; height: 36px; background: var(--line); position: relative; overflow: hidden; }
 .rs-cue i::after { content: ''; position: absolute; left: 0; top: -40%; width: 1px; height: 40%; background: var(--ink); animation: cue 2.2s var(--ease) infinite; }
 @keyframes cue { to { top: 100%; } }
@@ -585,4 +590,10 @@ body[data-screen="journey"] .topbar { display: none; }
   .jframe .opt__text { font-size: 15px; }
   .jframe .slider__readout { font-size: 72px; }
   .jframe .slider input[type=range] { margin: 28px 0 12px; }
+}
+
+/* 결과 무대 → 유형 바로가기: 상단 메뉴바에 가리지 않게 */
+.rs-id { scroll-margin-top: 60px; }
+@media (max-width: 640px) {
+  .rs-stage__no, .rs-stage__color { bottom: 118px; }
 }

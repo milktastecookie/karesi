@@ -328,7 +328,7 @@
       '<span class="rs-stage__no">N° ' + pad(t.id) + ' <small>/ ' + TYPES + '</small></span>' +
       '<img class="rs-stage__img" src="' + t.img + '" alt="' + t.item + ' ' + t.color + '">' +
       '<span class="rs-stage__color">' + chip(t) + t.color + '</span>' +
-      '<span class="rs-cue" aria-hidden="true">SCROLL<i></i></span>' +
+      '<button class="rs-cue" data-act="to-type"><span class="rs-cue__box">' + (mode === 'me' ? '나의 유형 보기' : '유형 보기') + ' <b aria-hidden="true">↓</b></span><span class="rs-cue__s" aria-hidden="true">SCROLL<i></i></span></button>' +
     '</section>';
 
     /* 2. 정체: 유형과 한 줄 소개 */
@@ -662,6 +662,7 @@
       case 'home': closePanel(); setHash(''); show('intro'); break;
       case 'share': share(); break;
       case 'save': saveCard(); break;
+      case 'to-type': var idEl = $('#rs-id'); if (idEl) idEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); break;
     }
   });
   $('#btn-back').addEventListener('click', back);
@@ -681,6 +682,23 @@
     var idx = '1234'.indexOf(k); if (idx < 0) idx = 'abcd'.indexOf(k);
     if (idx >= 0) { var b = $$('.opt')[idx]; if (b) pick(b); }
   });
+
+  /* ---------- 아무도 만지지 않으면 첫 화면으로 (전시용) ---------- */
+  var IDLE_MS = (D.idleResetSeconds || 0) * 1000, idleTimer = null;
+  function goHomeIdle() {
+    if (document.body.dataset.screen === 'intro' && $('#panel').hidden) return;
+    clearInterval(pro.timer); pro.typing = false;
+    closePanel(); setHash(''); show('intro');
+  }
+  function bumpIdle() {
+    if (!IDLE_MS) return;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(goHomeIdle, IDLE_MS);
+  }
+  ['mousemove', 'pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(function (ev) {
+    window.addEventListener(ev, bumpIdle, { passive: true });
+  });
+  bumpIdle();
 
   /* ---------- 진입 ---------- */
   function route() {
