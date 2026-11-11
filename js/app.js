@@ -248,21 +248,33 @@
   /* ---------- 로딩 → 결과 ---------- */
   function finish() {
     show('loading');
-    var el = $('#loading-word');
-    $('#loading-code').innerHTML = MO.html('KARESI', { cls: 'is-sew morse--slow' });
-    var words = D.loadingWords, i = 0, final = words.slice(0, -1);
     var res = E.compute(state.answers, state.times);
-    el.textContent = '...';
-    var tick = setInterval(function () {
-      el.classList.remove('flip'); void el.offsetWidth; el.classList.add('flip');
-      if (i < final.length) { el.textContent = final[i]; i++; return; }
-      clearInterval(tick);
-      el.textContent = words[words.length - 1];
+    var box = $('#loading-code');
+    var go = function () { setHash(E.encode(res) + '&me=1'); openResult(res, 'me'); };
+    // KARESI를 한 땀씩 수놓고 → 땀이 하나씩 풀려 흩어지며 글자가 드러나고 → 사라지면 결과
+    box.innerHTML = MO.html('KARESI', { rows: ['KAR', 'ESI'], cls: 'is-sew' });
+    var morse = box.firstChild, sts = $$('.st', box);
+    if (reduceMotion) { $$('.morse__ch', box).forEach(function (c) { c.classList.add('is-open'); }); setTimeout(go, 1200); return; }
+    var SEW = (sts.length - 1) * 55 + 500;
+    var STEP = 120;
+    setTimeout(function () {
+      morse.classList.remove('is-sew');
+      morse.classList.add('is-unravel');
+      sts.forEach(function (st, k) {
+        setTimeout(function () {
+          st.style.setProperty('--dx', (Math.random() * 90 - 45).toFixed(0) + 'px');
+          st.style.setProperty('--dy', (40 + Math.random() * 110).toFixed(0) + 'px');
+          st.style.setProperty('--rot', (Math.random() * 160 - 80).toFixed(0) + 'deg');
+          st.classList.add('is-out');
+          var ch = st.parentNode;
+          if (st === ch.lastElementChild) ch.classList.add('is-open');
+        }, k * STEP);
+      });
       setTimeout(function () {
-        setHash(E.encode(res) + '&me=1');
-        openResult(res, 'me');
-      }, 650);
-    }, 340);
+        morse.classList.add('is-gone');
+        setTimeout(go, 500);
+      }, sts.length * STEP + 900);
+    }, SEW + 250);
   }
 
   /* =========================================================

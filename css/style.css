@@ -450,7 +450,14 @@ body[data-screen="intro"] .topbar { display: none; }
 .jtop__station { justify-self: end; }
 
 /* 로딩 */
-.loading__code .morse { --st-h: 5px; --step: 175ms; }
+.loading__code .morse { --st-h: clamp(7px, 1.15vw, 15px); --step: 55ms; transition: opacity .5s var(--ease), filter .5s var(--ease); }
+/* 땀이 하나씩 풀려 흩어지고, 그 자리에 글자가 드러나 */
+.loading__code .morse.is-unravel .st { transition: transform .9s cubic-bezier(.3,.1,.4,1), opacity .9s ease-in; transform-origin: center; }
+.loading__code .morse.is-unravel .st.is-out { transform: translate(var(--dx, 0), var(--dy, 80px)) rotate(var(--rot, 40deg)) scaleX(.35); opacity: 0; }
+.loading__code .morse__ch::after { top: 50%; transform: translate(-50%, -30%); font-size: calc(var(--st-h) * 3.6); font-weight: 300; letter-spacing: 0; color: var(--ink); }
+.loading__code .morse__ch.is-open::after { opacity: 1; transform: translate(-50%, -50%); }
+.loading__code .morse.is-gone { opacity: 0; filter: blur(6px); }
+.loading__eyebrow { animation: fadeIn 1s var(--ease) both; }
 
 /* 결과 고유 코드 */
 .rs-code { display: flex; flex-direction: column; align-items: center; gap: 26px; margin-top: 30px; }
