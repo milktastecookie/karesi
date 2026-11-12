@@ -445,6 +445,10 @@
     '</div>';
 
     $('#result-root').innerHTML = h;
+    // 결과 QR은 화면 오른쪽 아래에 고정 (스크롤해도 계속 보이게)
+    var oldQr = $('#rs-qr'); if (oldQr) oldQr.remove();
+    var qrHtml = resultQr(res, mode);
+    if (qrHtml) document.body.insertAdjacentHTML('beforeend', qrHtml);
     state.result = res;
     state.mode = mode;
   }
@@ -496,6 +500,16 @@
     if (!res) return;
     setHash('type-' + id);
     openResult(res, 'browse');
+  }
+
+  /* ---------- 전시용: 결과를 내 폰으로 가져가는 QR ---------- */
+  function resultQr(res, mode) {
+    if (mode === 'browse' || !window.KARESI_QR) return '';
+    var url = location.origin + location.pathname + '#' + E.encode(res) + (mode === 'me' ? '&me=1' : '');
+    var svg;
+    try { svg = window.KARESI_QR(url, '#111111', '#FFFFFF', '이 결과를 휴대폰으로 여는 QR 코드'); } catch (e) { return ''; }
+    return '<div class="rs-qr" id="rs-qr">' + svg +
+      '<p><b>내 폰으로 결과 가져가기</b><small>카메라로 찍으면 이 결과가 열려요</small></p></div>';
   }
 
   /* ---------- 공유 ---------- */

@@ -604,3 +604,12 @@ body[data-screen="journey"] .topbar { display: none; }
 @media (max-width: 640px) {
   .rs-stage__no, .rs-stage__color { bottom: 118px; }
 }
+
+/* 결과 → 내 폰으로 가져가는 QR: 전시장 컴퓨터 화면 오른쪽 아래에 고정 (휴대폰·좁은 화면에서는 숨김) */
+.rs-qr { position: fixed; right: 28px; bottom: 28px; z-index: 35; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 12px 12px 14px; background: #FFFFFF; color: #111111; border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(0, 0, 0, .06); text-align: center; animation: fadeIn 1s 1.2s var(--ease) both; }
+.rs-qr svg { width: 128px; height: 128px; display: block; }
+.rs-qr p { display: flex; flex-direction: column; gap: 3px; margin: 0; }
+.rs-qr b { font-weight: 500; font-size: 13px; }
+.rs-qr small { font-size: 10.5px; color: #777777; }
+body:not([data-screen="result"]) .rs-qr { display: none; }
+@media (max-width: 899px), (hover: none) and (pointer: coarse) { .rs-qr { display: none; } }
