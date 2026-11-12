@@ -707,9 +707,16 @@
     clearTimeout(idleTimer);
     idleTimer = setTimeout(goHomeIdle, IDLE_MS);
   }
-  ['mousemove', 'pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(function (ev) {
+  ['pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (ev) {
     window.addEventListener(ev, bumpIdle, { passive: true });
   });
+  // 책상 위 마우스의 미세한 떨림은 무시하고, 실제로 움직였을 때(8px 이상)만 '사람이 있다'로 봐
+  var lastMX = null, lastMY = null;
+  window.addEventListener('mousemove', function (e) {
+    if (lastMX === null || Math.abs(e.clientX - lastMX) + Math.abs(e.clientY - lastMY) > 8) {
+      lastMX = e.clientX; lastMY = e.clientY; bumpIdle();
+    }
+  }, { passive: true });
   bumpIdle();
 
   /* ---------- 진입 ---------- */
