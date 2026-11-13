@@ -626,7 +626,7 @@
   var PANELS = {
     film: function () {
       return '<p class="eyebrow">BRAND FILM</p><h2>Find your KARESI</h2>' +
-        '<p>카레시를 찾아 떠나는 여정을 두 편의 필름에 담았어.</p>' +
+        '<p>카레시를 찾아 떠나는 여자와 카레시가 되기 위한 남자의 여정.</p>' +
         (D.films || []).map(function (f, i) {
           var id = ytId(f.url);
           return '<h3>' + f.label + '</h3><div class="film" data-film="' + id + '" id="film-' + i + '">' +
