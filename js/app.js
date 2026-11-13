@@ -621,10 +621,15 @@
   }
 
   /* ---------- 패널 ---------- */
+  var ACCOUNT = '100300504551';
   var PANELS = {
     about: function () {
       return '<p class="eyebrow">ABOUT</p><h2>카레시를 찾아서</h2>' +
         '<p>카레시는 카레와 사랑 사이 어딘가에 있는, 아직 만나지 못한 <b>나만의 한 벌</b>이야. 카레라이스 골목부터 카리스마 광장까지 열두 개의 정류장을 지나면, 열두 벌 중 나를 가장 닮은 옷을 찾게 돼.</p>' +
+        '<h3>Find your KARESI</h3>' +
+        '<p>카레시만의 방식으로 브랜드를 소개하는 첫 프로젝트, <b>Find your KARESI 팝업스토어</b>를 열어. 옷을 걸어두고 기다리는 대신, 한 사람 한 사람이 스스로 자신의 카레시를 찾아 나서는 여정을 만들었어.</p><ul>' +
+        '<li><b>브랜드 필름</b> — 카레시를 찾아 떠나는 여정을 한 편의 영상으로 담았어.</li>' +
+        '<li><b>성향 테스트 웹사이트</b> — 열두 개의 질문으로 나의 스타일 성향을 읽고, 열두 벌 중 나를 가장 닮은 카레시를 찾아줘. 지금 보고 있는 바로 이 사이트야.</li></ul>' +
         '<h3>네 개의 스타일 축</h3><ul>' + D.axes.map(function (a) {
           return '<li><b>' + a.name + '</b> — ' + a.neg + ' ↔ ' + a.pos + '</li>';
         }).join('') + '</ul>' +
@@ -649,7 +654,9 @@
         '<p>프로젝트 KARESI에 대한 이야기, 협업 제안은 언제든 환영해.</p>' +
         '<h3>Reach us</h3><ul>' +
         '<li><b>Email</b> — hello@karesi.example</li>' +
-        '<li><b>Instagram</b> — @karesi.journey</li></ul>';
+        '<li><b>Instagram</b> — @karesi.journey</li></ul>' +
+        '<h3>Account</h3>' +
+        '<button class="acct" data-act="copy-acct" aria-label="케이뱅크 계좌번호 복사">케이뱅크 <b>' + ACCOUNT + '</b><small>COPY</small></button>';
     }
   };
   var lastFocus = null;
@@ -688,6 +695,11 @@
       case 'home': closePanel(); setHash(''); show('intro'); break;
       case 'share': share(); break;
       case 'save': saveCard(); break;
+      case 'copy-acct':
+        var ok = function () { toast('계좌번호를 복사했어'); };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText('케이뱅크 ' + ACCOUNT).then(ok, function () { toast('케이뱅크 ' + ACCOUNT); });
+        else toast('케이뱅크 ' + ACCOUNT);
+        break;
       case 'to-type': var idEl = $('#rs-id'); if (idEl) idEl.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); break;
     }
   });

@@ -101,7 +101,7 @@ body[data-screen="intro"] .topbar { display: none; }
 }
 .frame > span, .frame__tr { position: absolute; font-family: var(--latin); font-size: max(10px, .72cqw); letter-spacing: .26em; color: var(--ink-3); animation: fadeIn 1.6s .6s var(--ease) both; }
 .frame__tl { top: 4.2cqw; left: 4.4cqw; color: var(--ink) !important; font-weight: 600; letter-spacing: .4em !important; }
-.frame__tr { top: 4.2cqw; right: 4.4cqw; display: flex; gap: 2.4cqw; }
+.frame__tr { top: 4.2cqw; right: 4.4cqw; display: flex; gap: 2.4cqw; z-index: 3; }
 .frame__tr button { letter-spacing: inherit; color: var(--ink-3); transition: color .3s; }
 .frame__tr button:hover { color: var(--ink); }
 .frame__bl { bottom: 4.2cqw; left: 4.4cqw; }
@@ -613,3 +613,9 @@ body[data-screen="journey"] .topbar { display: none; }
 .rs-qr small { font-size: 10.5px; color: #777777; }
 body:not([data-screen="result"]) .rs-qr { display: none; }
 @media (max-width: 899px), (hover: none) and (pointer: coarse) { .rs-qr { display: none; } }
+
+/* CONTACT 계좌: 눌러서 복사 */
+.acct { display: inline-flex; align-items: baseline; gap: 12px; margin-top: 4px; padding: 12px 16px; border: 1px solid var(--line); font: inherit; color: var(--ink); cursor: pointer; transition: border-color .3s; }
+.acct:hover { border-color: var(--ink); }
+.acct b { font-weight: 500; letter-spacing: .04em; }
+.acct small { font-family: var(--latin); font-size: 9px; letter-spacing: .24em; color: var(--ink-3); }
