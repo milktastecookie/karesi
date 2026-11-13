@@ -712,6 +712,7 @@
   /* ---------- 아무도 만지지 않으면 첫 화면으로 (전시용) ---------- */
   var IDLE_MS = (D.idleResetSeconds || 0) * 1000, idleTimer = null;
   function goHomeIdle() {
+    if (shopWin) return;
     if (document.body.dataset.screen === 'intro' && $('#panel').hidden) return;
     clearInterval(pro.timer); pro.typing = false;
     closePanel(); setHash(''); show('intro');
@@ -732,6 +733,31 @@
     }
   }, { passive: true });
   bumpIdle();
+
+  /* ---------- 전시용: 무신사·공식몰은 새 탭으로 열고, 일정 시간 뒤 닫고 카레시로 복귀 ---------- */
+  var SHOP_MS = (D.shopReturnSeconds || 0) * 1000, shopWin = null, shopTimer = null;
+  var isDesk = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
+  function backFromShop(fromTimer) {
+    clearTimeout(shopTimer); shopTimer = null;
+    var w = shopWin; shopWin = null;
+    if (w) { try { w.close(); } catch (e) {} }
+    try { window.focus(); } catch (e) {}
+    if (fromTimer) toast('카레시로 돌아왔어');
+    bumpIdle();
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[target="_blank"]');
+    if (!a || !SHOP_MS || !isDesk || a.origin === location.origin) return;
+    var w = window.open(a.href, 'karesi-shop');
+    if (!w) return; // 팝업이 막히면 원래 링크대로 열려
+    e.preventDefault();
+    shopWin = w; clearTimeout(idleTimer);
+    clearTimeout(shopTimer);
+    shopTimer = setTimeout(function () { backFromShop(true); }, SHOP_MS);
+  }, true);
+  // 관람객이 직접 카레시 탭으로 돌아오면 쇼핑 탭은 정리해
+  window.addEventListener('focus', function () { if (shopWin) backFromShop(false); });
+  document.addEventListener('visibilitychange', function () { if (!document.hidden && shopWin) backFromShop(false); });
 
   /* ---------- 진입 ---------- */
   function route() {

@@ -17,6 +17,8 @@ window.KARESI_DATA = {
   showPrice: false,
   // 이 시간(초) 동안 마우스·터치·키보드 움직임이 없으면 첫 화면으로 돌아가 (0 = 끄기)
   idleResetSeconds: 30,
+  // 전시장 컴퓨터에서 무신사·공식몰을 열면 이 시간(초) 뒤 그 탭을 닫고 카레시로 돌아와 (휴대폰은 해당 없음)
+  shopReturnSeconds: 60,
 
   axes: [
     { key: 'f', name: '실루엣', neg: '테일러드', pos: '릴랙스드', negEn: 'TAILORED', posEn: 'RELAXED' },
