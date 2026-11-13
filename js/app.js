@@ -653,8 +653,8 @@
       return '<p class="eyebrow">CONTACT</p><h2>카레시를 함께 찾아요</h2>' +
         '<p>프로젝트 KARESI에 대한 이야기, 협업 제안은 언제든 환영해.</p>' +
         '<h3>Reach us</h3><ul>' +
-        '<li><b>Email</b> — hello@karesi.example</li>' +
-        '<li><b>Instagram</b> — @karesi.journey</li></ul>' +
+        '<li><b>Instagram</b> — <a href="https://www.instagram.com/karesi.zip/" target="_blank" rel="noopener">@karesi.zip</a></li>' +
+        '<li><b>Official Store</b> — <a href="https://karesi.kr/" target="_blank" rel="noopener">karesi.kr</a></li></ul>' +
         '<h3>Account</h3>' +
         '<button class="acct" data-act="copy-acct" aria-label="케이뱅크 계좌번호 복사">케이뱅크 <b>' + ACCOUNT + '</b><small>COPY</small></button>';
     }

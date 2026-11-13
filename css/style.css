@@ -619,3 +619,7 @@ body:not([data-screen="result"]) .rs-qr { display: none; }
 .acct:hover { border-color: var(--ink); }
 .acct b { font-weight: 500; letter-spacing: .04em; }
 .acct small { font-family: var(--latin); font-size: 9px; letter-spacing: .24em; color: var(--ink-3); }
+
+/* 패널 안 링크 */
+.panel li a { color: var(--ink); border-bottom: 1px solid var(--line); transition: border-color .3s; }
+.panel li a:hover { border-color: var(--ink); }
