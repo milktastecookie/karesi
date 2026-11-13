@@ -623,3 +623,19 @@ body:not([data-screen="result"]) .rs-qr { display: none; }
 /* 패널 안 링크 */
 .panel li a { color: var(--ink); border-bottom: 1px solid var(--line); transition: border-color .3s; }
 .panel li a:hover { border-color: var(--ink); }
+
+/* FILM 메뉴: 푸른색으로 강조 */
+:root { --film: #2346FF; }
+:root[data-theme="dark"] { --film: #7C93FF; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --film: #7C93FF; } }
+.nav .nav-film, .frame__tr .nav-film { color: var(--film); font-weight: 600; }
+.nav .nav-film:hover, .frame__tr .nav-film:hover { color: var(--film); opacity: .7; }
+/* 브랜드 필름 패널 (넓게) */
+.panel.is-wide .panel__sheet { width: min(860px, 100%); }
+.film { position: relative; aspect-ratio: 16 / 9; background: #000; overflow: hidden; }
+.film iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.film__poster { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0; cursor: pointer; }
+.film__poster img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity .4s; }
+.film__poster:hover img { opacity: .82; }
+.film__play { position: absolute; left: 50%; top: 50%; width: 68px; height: 68px; margin: -34px 0 0 -34px; border-radius: 50%; background: var(--film); box-shadow: 0 8px 26px rgba(0, 0, 0, .25); }
+.film__play::after { content: ""; position: absolute; left: 27px; top: 22px; border-left: 20px solid #fff; border-top: 12px solid transparent; border-bottom: 12px solid transparent; }

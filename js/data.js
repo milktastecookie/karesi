@@ -19,6 +19,11 @@ window.KARESI_DATA = {
   idleResetSeconds: 30,
   // 전시장 컴퓨터에서 무신사·공식몰을 열면 이 시간(초) 뒤 그 탭을 닫고 카레시로 돌아와 (휴대폰은 해당 없음)
   shopReturnSeconds: 60,
+  // FILM 메뉴: 브랜드 필름 (유튜브 링크만 바꾸면 돼)
+  films: [
+    { label: 'EP.01', url: 'https://youtu.be/IwbP0VJ15bE' },
+    { label: 'EP.02', url: 'https://youtu.be/m3BBp7MxsuY' }
+  ],
 
   axes: [
     { key: 'f', name: '실루엣', neg: '테일러드', pos: '릴랙스드', negEn: 'TAILORED', posEn: 'RELAXED' },

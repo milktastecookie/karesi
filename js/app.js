@@ -622,7 +622,18 @@
 
   /* ---------- 패널 ---------- */
   var ACCOUNT = '100300504551';
+  function ytId(u) { var m = String(u || '').match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/); return m ? m[1] : ''; }
   var PANELS = {
+    film: function () {
+      return '<p class="eyebrow">BRAND FILM</p><h2>Find your KARESI</h2>' +
+        '<p>카레시를 찾아 떠나는 여정을 두 편의 필름에 담았어.</p>' +
+        (D.films || []).map(function (f, i) {
+          var id = ytId(f.url);
+          return '<h3>' + f.label + '</h3><div class="film" data-film="' + id + '" id="film-' + i + '">' +
+            '<button class="film__poster" data-act="play-film" aria-label="' + f.label + ' 재생">' +
+            '<img src="https://i.ytimg.com/vi/' + id + '/hqdefault.jpg" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'"><span class="film__play" aria-hidden="true"></span></button></div>';
+        }).join('');
+    },
     about: function () {
       return '<p class="eyebrow">ABOUT</p><h2>카레시를 찾아서</h2>' +
         '<p>카레시는 카레와 사랑 사이 어딘가에 있는, 아직 만나지 못한 <b>나만의 한 벌</b>이야. 카레라이스 골목부터 카리스마 광장까지 열두 개의 정류장을 지나면, 열두 벌 중 나를 가장 닮은 옷을 찾게 돼.</p>' +
@@ -659,17 +670,57 @@
         '<button class="acct" data-act="copy-acct" aria-label="케이뱅크 계좌번호 복사">케이뱅크 <b>' + ACCOUNT + '</b><small>COPY</small></button>';
     }
   };
+  /* 브랜드 필름: 누르면 유튜브 플레이어로 바뀌고, 재생 중엔 '30초 뒤 첫 화면으로'가 멈춰 */
+  var films = [], filmPlaying = false, ytLoading = null;
+  function loadYT() {
+    if (window.YT && window.YT.Player) return Promise.resolve();
+    if (ytLoading) return ytLoading;
+    ytLoading = new Promise(function (res) {
+      var prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function () { if (prev) prev(); res(); };
+      var sc = document.createElement('script'); sc.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(sc);
+    });
+    return ytLoading;
+  }
+  function playFilm(box) {
+    var id = box.dataset.film; if (!id || box.classList.contains('is-on')) return;
+    films.forEach(function (p) { try { p.pauseVideo(); } catch (e) {} });
+    box.classList.add('is-on');
+    var host = document.createElement('div'); box.innerHTML = ''; box.appendChild(host);
+    loadYT().then(function () {
+      if (!document.contains(host)) return;
+      var p = new YT.Player(host, { videoId: id, host: 'https://www.youtube-nocookie.com', width: '100%', height: '100%',
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1, modestbranding: 1 },
+        events: {
+          onReady: function (e) { e.target.playVideo(); },
+          onStateChange: function (e) {
+            if (e.data === 1) films.forEach(function (o) { if (o !== p) try { o.pauseVideo(); } catch (err) {} });
+            filmPlaying = films.some(function (o) { try { return o.getPlayerState() === 1; } catch (err) { return false; } });
+            bumpIdle();
+          }
+        } });
+      films.push(p);
+    });
+  }
+  function stopFilms() {
+    films.forEach(function (p) { try { p.destroy(); } catch (e) {} });
+    films = []; filmPlaying = false;
+  }
+
   var lastFocus = null;
   function openPanel(name) {
     if (!PANELS[name]) return;
     lastFocus = document.activeElement;
+    stopFilms();
     $('#panel-body').innerHTML = PANELS[name]();
+    $('#panel').classList.toggle('is-wide', name === 'film');
     $('#panel').hidden = false;
     $('.panel__close').focus();
   }
   function closePanel() {
     if ($('#panel').hidden) return;
     $('#panel').hidden = true;
+    stopFilms(); if ($('#panel').classList.contains('is-wide')) $('#panel-body').innerHTML = '';
     if (lastFocus && lastFocus.focus && document.contains(lastFocus)) lastFocus.focus();
   }
 
@@ -695,6 +746,7 @@
       case 'home': closePanel(); setHash(''); show('intro'); break;
       case 'share': share(); break;
       case 'save': saveCard(); break;
+      case 'play-film': playFilm(el.closest('.film')); break;
       case 'copy-acct':
         var ok = function () { toast('계좌번호를 복사했어'); };
         if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText('케이뱅크 ' + ACCOUNT).then(ok, function () { toast('케이뱅크 ' + ACCOUNT); });
@@ -725,6 +777,7 @@
   var IDLE_MS = (D.idleResetSeconds || 0) * 1000, idleTimer = null;
   function goHomeIdle() {
     if (shopWin) return;
+    if (filmPlaying) { bumpIdle(); return; }
     if (document.body.dataset.screen === 'intro' && $('#panel').hidden) return;
     clearInterval(pro.timer); pro.typing = false;
     closePanel(); setHash(''); show('intro');
